@@ -1,0 +1,47 @@
+#Missionaries Cannibal Problem
+from collections import deque
+
+def is_valid(state):
+    m, c, s = state
+    if m < 0 or m > 3 or c < 0 or c > 3:
+        return False
+    if m < c and m > 0:
+        return False
+    if 3 - m < 3 - c and 3 - m > 0:
+        return False
+    return True
+
+def get_next_states(state):
+    m, c, s = state
+    next_states = []
+    if s == 'L':
+        next_states.extend([(m-i, c-j, 'R') for i in range(3) for j in range(3) if 1 <= i+j <= 2])
+    else:
+        next_states.extend([(m+i, c+j, 'L') for i in range(3) for j in range(3) if 1 <= i+j <= 2])
+    return [ns for ns in next_states if is_valid(ns)]
+
+def bfs_missionaries_cannibals():
+    start_state = (3, 3, 'L')
+    goal_state = (0, 0, 'R')
+    
+    visited = set()
+    queue = deque([(start_state, [])])
+    
+    while queue:
+        current_state, path = queue.popleft()
+        if current_state == goal_state:
+            return path + [current_state]
+        
+        visited.add(current_state)
+        for next_state in get_next_states(current_state):
+            if next_state not in visited:
+                queue.append((next_state, path + [current_state]))
+    
+    return None
+
+solution = bfs_missionaries_cannibals()
+if solution:
+    for state in solution:
+        print(state)
+else:
+    print("No solution found.")
