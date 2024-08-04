@@ -1,0 +1,1 @@
+# Basic-Search-Stratergy-Algorithms-and-Artificial-Intelligence
